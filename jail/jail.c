@@ -386,9 +386,10 @@ int main(int argc, char **argv)
 
 	uloop_init();
 	if (opts.namespace) {
-		jail_process.pid = clone(exec_jail,
-			child_stack + STACK_SIZE,
-			CLONE_NEWUTS | CLONE_NEWPID | CLONE_NEWNS | CLONE_NEWIPC | SIGCHLD, NULL);
+		int flags = CLONE_NEWPID | CLONE_NEWNS | CLONE_NEWIPC | SIGCHLD;
+		if (opts.hostname)
+			flags |= CLONE_NEWUTS;
+		jail_process.pid = clone(exec_jail, child_stack + STACK_SIZE, flags, NULL);
 	} else {
 		jail_process.pid = fork();
 	}
