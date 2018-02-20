@@ -58,7 +58,7 @@ static int watchdog_open(bool cloexec)
 		wdt_fd = atoi(env);
 		unsetenv("WDTFD");
 	} else {
-		wdt_fd = open(WDT_PATH, O_WRONLY);
+		wdt_fd = -1;//open(WDT_PATH, O_WRONLY);
 	}
 
 	if (wdt_fd < 0)
